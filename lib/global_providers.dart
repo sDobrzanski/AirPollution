@@ -1,3 +1,5 @@
+import 'package:air_pollution_app/blocs/air_pollution_api_cubit/air_pollution_api_cubit.dart';
+import 'package:air_pollution_app/repositories/air_pollution_api_repo.dart';
 import 'package:air_pollution_app/web_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,9 +23,17 @@ class GlobalProviders extends StatelessWidget {
 
   List<RepositoryProvider<dynamic>> _buildRepositories(BuildContext context) =>
       <RepositoryProvider<dynamic>>[
+        RepositoryProvider<AirPollutionApiRepo>(
+          create: (BuildContext context) => AirPollutionApiRepo(),
+        ),
       ];
 
   List<BlocProvider<dynamic>> _buildBlocProviders(BuildContext context) =>
       <BlocProvider<dynamic>>[
+        BlocProvider<AirPollutionApiCubit>(
+          create: (BuildContext context) => AirPollutionApiCubit(
+            RepositoryProvider.of<AirPollutionApiRepo>(context),
+          ),
+        ),
       ];
 }

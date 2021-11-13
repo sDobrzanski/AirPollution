@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:air_pollution_app/air_data.dart';
+import 'package:air_pollution_app/models/air_data.dart';
 import 'package:http/http.dart' as http;
 
 class AirPollutionApiRepo {
@@ -8,8 +8,7 @@ class AirPollutionApiRepo {
   final String _apiKey = "545ac0d77fa3f26c404c19b5fe65ee6d";
   final Map<String, String> _headers = {"Content-type": "application/json"};
 
-  Future<AirData>? getRecipesUsingIngredients(
-      List<String> ingredients, String lat, String long) async {
+  Future<AirData>? getAirData(String lat, String long) async {
     final Map<String, dynamic> query = <String, dynamic>{};
     query.addAll({
       'appid': _apiKey,
