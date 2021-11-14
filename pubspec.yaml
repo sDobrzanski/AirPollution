@@ -38,6 +38,7 @@ dependencies:
   firebase: ^9.0.2
   firebase_auth: ^3.2.0
   firebase_core: ^1.10.0
+  cloud_functions: ^3.1.1
 
   amplify_flutter: ^0.2.8
   amplify_core: ^0.2.8

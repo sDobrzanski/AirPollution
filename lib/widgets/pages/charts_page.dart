@@ -6,6 +6,8 @@ class ChartsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //TODO Implement charts when data will be in cloud firestore/aws db
-    return const SizedBox();
+    return Material(
+      child: Container(),
+    );
   }
 }
