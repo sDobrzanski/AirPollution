@@ -12,11 +12,10 @@ class AirPollutionApiCubit extends Cubit<AirPollutionApiState> {
 
   AirPollutionApiCubit(this._airPollutionApiRepo) : super(StateInitialize());
 
-  Future<void> getAirData(String numberOfRecipes) async {
+  Future<void> getAirData(String lat, String long) async {
     emit(StateLoading());
     try {
-      final AirData? airData =
-          await _airPollutionApiRepo.getAirData('43.22', '31.12');
+      final AirData? airData = await _airPollutionApiRepo.getAirData(lat, long);
       emit(StateSuccess(airData));
     } catch (e) {
       log('Error AirPollutionApiCubit: ${e.toString()}');

@@ -1,10 +1,10 @@
+import 'package:air_pollution_app/models/geolocation_data.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 
 const String _apiKey = "AIzaSyB-ZGHq8WotXTcHTl2wykuTNAspdGHcA-U";
 
 class GooglePlacesRepo {
-
-  Future httpRequestViaServer(String place) async {
+  Future<GeolocationData> httpRequestViaServer(String place) async {
     String url = "maps.googleapis.com";
     final Map<String, dynamic> query = <String, dynamic>{};
     query.addAll({
@@ -22,17 +22,13 @@ class GooglePlacesRepo {
           'url': uri.toString(),
         },
       );
-      return (result.data);
+      final GeolocationData geolocationData =
+          GeolocationData.fromJson(result.data);
+      return geolocationData;
     } on FirebaseFunctionsException catch (e) {
-      print('caught firebase functions exception');
-      print(e.code);
-      print(e.message);
-      print(e.details);
-      return null;
+      throw 'Caught firebase functions exception ${e.code} ${e.message} ${e.details}';
     } catch (e) {
-      print('caught generic exception');
-      print(e);
-      return null;
+      throw 'Caught generic exception $e';
     }
   }
 }

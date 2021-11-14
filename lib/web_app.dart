@@ -1,4 +1,3 @@
-import 'package:air_pollution_app/widgets/pages/app_bar.dart';
 import 'package:air_pollution_app/widgets/pages/charts_page.dart';
 import 'package:air_pollution_app/widgets/pages/home_page.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,6 @@ class WebApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         home: const Scaffold(
-          appBar: CustomAppBar(),
           body: HomePage(),
         ),
         routes: {

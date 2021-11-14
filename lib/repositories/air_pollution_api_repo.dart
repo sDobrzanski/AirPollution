@@ -3,17 +3,23 @@ import 'dart:convert';
 import 'package:air_pollution_app/models/air_data.dart';
 import 'package:http/http.dart' as http;
 
+
+//TODO Fix XMLHttpRequest error (call it via cloud functions)
 class AirPollutionApiRepo {
   final String _recipesUrl = 'api.openweathermap.org';
   final String _apiKey = "545ac0d77fa3f26c404c19b5fe65ee6d";
-  final Map<String, String> _headers = {"Content-type": "application/json"};
+  final Map<String, String> _headers = {
+    "Content-type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+    "Accept": "*/*",
+  };
 
   Future<AirData>? getAirData(String lat, String long) async {
     final Map<String, dynamic> query = <String, dynamic>{};
     query.addAll({
       'appid': _apiKey,
       'lat': lat,
-      'long': long,
+      'lon': long,
     });
     Uri uri = Uri.https(_recipesUrl, '/data/2.5/air_pollution', query);
     final http.Response _response = await http.get(uri, headers: _headers);

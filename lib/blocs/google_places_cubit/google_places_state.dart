@@ -9,17 +9,17 @@ class StateInitialize extends GooglePlacesState {}
 
 class StateLoading extends GooglePlacesState {}
 
-class StateSuccess extends GooglePlacesState {
-  final GeocoderResponse autocompleteResponse;
-  StateSuccess(this.autocompleteResponse);
+class GooglePlacesSuccess extends GooglePlacesState {
+  final GeolocationData geolocationData;
+  GooglePlacesSuccess(this.geolocationData);
 
   @override
-  List<Object?> get props => [autocompleteResponse];
+  List<Object?> get props => [geolocationData];
 }
 
-class StateFailure extends GooglePlacesState {
+class GooglePlacesFailure extends GooglePlacesState {
   final String errorMessage;
-  StateFailure(this.errorMessage);
+  GooglePlacesFailure(this.errorMessage);
 
   @override
   List<Object?> get props => [errorMessage];

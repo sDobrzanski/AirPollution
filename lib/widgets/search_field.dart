@@ -4,7 +4,10 @@ import 'package:air_pollution_app/blocs/google_places_cubit/google_places_cubit.
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SearchField extends StatefulWidget {
+  final Function(String) onSubmitted;
+
   const SearchField({
+    required this.onSubmitted,
     Key? key,
   }) : super(key: key);
 
@@ -13,13 +16,12 @@ class SearchField extends StatefulWidget {
 }
 
 class _SearchFieldState extends State<SearchField> {
-  late GooglePlacesCubit googlePlacesCubit;
+  late TextEditingController textEditingController;
 
   @override
   void initState() {
     super.initState();
-    googlePlacesCubit =
-        GooglePlacesCubit(RepositoryProvider.of<GooglePlacesRepo>(context));
+    textEditingController = TextEditingController();
   }
 
   @override
@@ -27,13 +29,12 @@ class _SearchFieldState extends State<SearchField> {
     return Column(
       children: [
         TextField(
+          controller: textEditingController,
           onSubmitted: (String value) {
-            setState(() {
-              if (value.isNotEmpty) {
-                googlePlacesCubit.httpRequestViaServer(value);
-                //TODO wyczyscic search field za pomoca controllera
-              }
-            });
+            if (value.isNotEmpty) {
+              widget.onSubmitted(value);
+              textEditingController.clear();
+            }
           },
           textAlign: TextAlign.center,
           style: const TextStyle(color: Colors.white),
@@ -63,7 +64,7 @@ class _SearchFieldState extends State<SearchField> {
 
   @override
   void dispose() {
-    googlePlacesCubit.close();
+    textEditingController.dispose();
     super.dispose();
   }
 }

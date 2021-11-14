@@ -2,7 +2,9 @@ import 'package:air_pollution_app/widgets/search_field.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
-  const CustomAppBar({Key? key}) : super(key: key);
+  final Function(String) onSubmitted;
+
+  const CustomAppBar({required this.onSubmitted, Key? key,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +15,9 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
           SizedBox(width: 500),
           SizedBox(
             width: 500,
-            child: SearchField(),
+            child: SearchField(
+              onSubmitted:onSubmitted,
+            ),
           ),
           TextButton(
             child: Text(
