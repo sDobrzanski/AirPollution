@@ -7,7 +7,7 @@ class GooglePlacesState extends Equatable {
 
 class StateInitialize extends GooglePlacesState {}
 
-class StateLoading extends GooglePlacesState {}
+class GooglePlacesLoading extends GooglePlacesState {}
 
 class GooglePlacesSuccess extends GooglePlacesState {
   final GeolocationData geolocationData;

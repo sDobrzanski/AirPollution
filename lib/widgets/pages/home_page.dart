@@ -19,6 +19,7 @@ class _HomePageState extends State<HomePage> {
   late GoogleMapController mapController;
   late GooglePlacesCubit googlePlacesCubit;
   late AirPollutionApiCubit airPollutionApiCubit;
+  GeolocationData? geolocationData;
   final LatLng _center = const LatLng(45.521563, -122.677433);
   final Map<String, Marker> _markers = {};
 
@@ -33,7 +34,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    late GeolocationData geolocationData;
     return Column(
       children: [
         CustomAppBar(
@@ -46,25 +46,28 @@ class _HomePageState extends State<HomePage> {
             listeners: [
               BlocListener<GooglePlacesCubit, GooglePlacesState>(
                 bloc: googlePlacesCubit,
+                listenWhen: (previous, __) => previous is GooglePlacesLoading,
                 listener: (context, state) {
                   if (state is GooglePlacesSuccess) {
                     setState(() {
                       geolocationData = state.geolocationData;
+
                       mapController.animateCamera(
                         CameraUpdate.newLatLngZoom(
                           LatLng(
-                            geolocationData
+                            geolocationData!
                                 .results!.first.geometry!.location!.lat!,
-                            geolocationData
+                            geolocationData!
                                 .results!.first.geometry!.location!.lng!,
                           ),
                           11,
                         ),
                       );
+
                       airPollutionApiCubit.getAirData(
-                        geolocationData.results!.first.geometry!.location!.lat!
+                        geolocationData!.results!.first.geometry!.location!.lat!
                             .toString(),
-                        geolocationData.results!.first.geometry!.location!.lng!
+                        geolocationData!.results!.first.geometry!.location!.lng!
                             .toString(),
                       );
                     });
@@ -73,24 +76,27 @@ class _HomePageState extends State<HomePage> {
               ),
               BlocListener<AirPollutionApiCubit, AirPollutionApiState>(
                 bloc: airPollutionApiCubit,
+                listenWhen: (previous, __) => previous is StateLoading,
                 listener: (context, state) {
                   if (state is StateSuccess) {
                     setState(() {
                       Marker marker = Marker(
-                        markerId: MarkerId(geolocationData.results!.first
+                        markerId: MarkerId(geolocationData!.results!.first
                             .addressComponents!.first.shortName!),
                         position: LatLng(
-                            geolocationData
+                            geolocationData!
                                 .results!.first.geometry!.location!.lat!,
-                            geolocationData
+                            geolocationData!
                                 .results!.first.geometry!.location!.lng!),
                         infoWindow: InfoWindow(
-                          title: geolocationData.results!.first.placeId!,
+                          title: geolocationData!.results!.first
+                              .addressComponents!.first.shortName!,
                           snippet:
-                              state.airData!.list!.first.main!.aqi.toString(),
+                              state.airData!.list!.first.components.toString(),
                         ),
                       );
-                      _markers[geolocationData.results!.first.placeId!] =
+
+                      _markers[geolocationData!.results!.first.placeId!] =
                           marker;
                     });
                   }
@@ -115,14 +121,14 @@ class _HomePageState extends State<HomePage> {
     mapController = controller;
     setState(() {
       Marker marker = Marker(
-        markerId: MarkerId('id'),
+        markerId: MarkerId('center'),
         position: _center,
         infoWindow: InfoWindow(
           title: 'title',
           snippet: 'snippet',
         ),
       );
-      _markers['id'] = marker;
+      _markers['center'] = marker;
     });
   }
 

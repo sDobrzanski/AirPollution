@@ -13,10 +13,10 @@ class GooglePlacesCubit extends Cubit<GooglePlacesState> {
   GooglePlacesCubit(this._googlePlacesRepo) : super(StateInitialize());
 
   Future<void> getLocationData(String place) async {
-    emit(StateLoading());
+    emit(GooglePlacesLoading());
     try {
       final GeolocationData geolocationData =
-          await _googlePlacesRepo.httpRequestViaServer(place);
+          await _googlePlacesRepo.getLocationLatLong(place);
       emit(GooglePlacesSuccess(geolocationData));
     } catch (e) {
       log('Error GooglePlacesCubit: ${e.toString()}');

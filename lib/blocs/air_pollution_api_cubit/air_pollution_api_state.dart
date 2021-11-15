@@ -11,7 +11,7 @@ class StateInitialize extends AirPollutionApiState {}
 class StateLoading extends AirPollutionApiState {}
 
 class StateSuccess extends AirPollutionApiState {
-  final AirData? airData;
+  final AirPollutionData? airData;
   StateSuccess(this.airData);
 
   @override
