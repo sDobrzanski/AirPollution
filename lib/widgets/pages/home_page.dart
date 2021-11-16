@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       );
 
-                      airPollutionApiCubit.getAirData(
+                      airPollutionApiCubit.getCurrentAirData(
                         geolocationData!.results!.first.geometry!.location!.lat!
                             .toString(),
                         geolocationData!.results!.first.geometry!.location!.lng!

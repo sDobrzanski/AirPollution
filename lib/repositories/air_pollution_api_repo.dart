@@ -7,7 +7,7 @@ class AirPollutionApiRepo {
   final CloudFunctionsService _cloudFunctionsService = CloudFunctionsService();
   final String _recipesUrl = 'api.openweathermap.org';
 
-  Future<AirPollutionData>? getAirData(String lat, String long) async {
+  Future<AirPollutionData>? getCurrentAirData(String lat, String long) async {
     final Map<String, dynamic> query = <String, dynamic>{};
     query.addAll({
       'appid': _apiKey,
@@ -18,6 +18,27 @@ class AirPollutionApiRepo {
 
     final dynamic result =
         await _cloudFunctionsService.httpRequestViaServer(uri);
+    final AirPollutionData airData = AirPollutionData.fromJson(result);
+    return airData;
+  }
+
+  Future<AirPollutionData>? getHistoryAirData(
+      String lat, String long, DateTime dateFrom, DateTime dateTo) async {
+    final double epochDateFrom = dateFrom.millisecondsSinceEpoch / 1000;
+    final double epochDateTo= dateTo.millisecondsSinceEpoch / 1000;
+    final Map<String, dynamic> query = <String, dynamic>{};
+    query.addAll({
+      'appid': _apiKey,
+      'lat': lat,
+      'lon': long,
+      'start': epochDateFrom.round().toString(),
+      'end': epochDateTo.round().toString(),
+    });
+    Uri uri = Uri.https(_recipesUrl, '/data/2.5/air_pollution/history', query);
+
+    final dynamic result =
+        await _cloudFunctionsService.httpRequestViaServer(uri);
+
     final AirPollutionData airData = AirPollutionData.fromJson(result);
     return airData;
   }

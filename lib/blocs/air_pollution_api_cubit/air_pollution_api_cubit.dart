@@ -12,10 +12,24 @@ class AirPollutionApiCubit extends Cubit<AirPollutionApiState> {
 
   AirPollutionApiCubit(this._airPollutionApiRepo) : super(StateInitialize());
 
-  Future<void> getAirData(String lat, String long) async {
+  Future<void> getCurrentAirData(String lat, String long) async {
     emit(StateLoading());
     try {
-      final AirPollutionData? airData = await _airPollutionApiRepo.getAirData(lat, long);
+      final AirPollutionData? airData =
+          await _airPollutionApiRepo.getCurrentAirData(lat, long);
+      emit(StateSuccess(airData));
+    } catch (e) {
+      log('Error AirPollutionApiCubit: ${e.toString()}');
+      emit(StateFailure(e.toString()));
+    }
+  }
+
+  Future<void> getHistoryAirData(
+      String lat, String long, DateTime dateFrom, DateTime dateTo) async {
+    emit(StateLoading());
+    try {
+      final AirPollutionData? airData = await _airPollutionApiRepo
+          .getHistoryAirData(lat, long, dateFrom, dateTo);
       emit(StateSuccess(airData));
     } catch (e) {
       log('Error AirPollutionApiCubit: ${e.toString()}');
