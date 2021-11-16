@@ -9,6 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:air_pollution_app/blocs/google_places_cubit/google_places_cubit.dart';
 
 class HomePage extends StatefulWidget {
+  static const String route = '/';
   const HomePage({Key? key}) : super(key: key);
 
   @override

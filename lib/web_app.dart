@@ -13,12 +13,9 @@ class WebApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         debugShowCheckedModeBanner: false,
-        home: const Scaffold(
-          body: HomePage(),
-        ),
         routes: {
-          '/home': (context) => const HomePage(),
-          '/charts': (context) => const ChartsPage(),
+          HomePage.route: (context) => const HomePage(),
+          ChartsPage.route: (context) => const ChartsPage(),
         });
   }
 }
