@@ -6,7 +6,7 @@ import 'package:air_pollution_app/models/air_data.dart';
 import 'package:air_pollution_app/models/geolocation_data.dart';
 import 'package:air_pollution_app/repositories/air_pollution_api_repo.dart';
 import 'package:air_pollution_app/repositories/google_places_repo.dart';
-import 'package:air_pollution_app/widgets/chart.dart';
+import 'package:air_pollution_app/widgets/custom_bar_chart.dart';
 import 'package:air_pollution_app/widgets/pages/app_bar.dart';
 import 'package:air_pollution_app/widgets/date_time_picker_row.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,6 +26,7 @@ class _ChartsPageState extends State<ChartsPage> {
   late PageController _pageController;
   late GooglePlacesCubit googlePlacesCubit;
   late AirPollutionApiCubit airPollutionApiCubit;
+  List<ListElement>? list;
   GeolocationData? geolocationData;
   AirPollutionData? airPollutionData;
   int chartsNumber = 1;
@@ -121,7 +122,8 @@ class _ChartsPageState extends State<ChartsPage> {
                             if (state is StateSuccess) {
                               setState(() {
                                 airPollutionData = state.airData;
-                                chartsNumber = airPollutionData!.list!.first.components!.length;
+                                list = airPollutionData?.list;
+                                chartsNumber = list!.first.components!.length;
                               });
                             }
                           },
@@ -139,7 +141,10 @@ class _ChartsPageState extends State<ChartsPage> {
                           itemCount: chartsNumber,
                           controller: _pageController,
                           itemBuilder: (BuildContext context, int index) =>
-                              CustomBarChart(index: index),
+                              CustomBarChart(
+                            index: index,
+                            list: list,
+                          ),
                         ),
                       ),
                     ),
@@ -173,7 +178,8 @@ class _ChartsPageState extends State<ChartsPage> {
     } else if (_pageController.page == chartsNumber) {
       return false;
     } else {
-      return _pageController.page != chartsNumber || _pageController.position.atEdge;
+      return _pageController.page != chartsNumber ||
+          _pageController.position.atEdge;
     }
   }
 

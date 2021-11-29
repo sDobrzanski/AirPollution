@@ -115,3 +115,17 @@ class Main extends Equatable {
         aqi,
       ];
 }
+
+class Component extends Equatable {
+  const Component({
+    this.name,
+    this.value,
+  });
+
+  final String? name;
+  final double? value;
+
+  @override
+  List<Object?> get props => [name, value];
+
+}
