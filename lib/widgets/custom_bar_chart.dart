@@ -34,15 +34,15 @@ class _CustomBarChartState extends State<CustomBarChart> {
 
     if (widget.list != null) {
       name = widget.list!.first.components!.keys.elementAt(widget.index);
-      widget.list?.forEach((ListElement listElement) {
-        if (listElement.components != null &&
-            listElement.components![name] != null &&
-            listElement.dt != null) {
-          //TODO ograniczyc liczbe wynikow
-          values.add(listElement.components![name]!);
-          dates.add(listElement.dt);
+      final int interatorValue = widget.list!.length ~/ 7;
+      for (int i= 0; i < widget.list!.length; i = i + interatorValue) {
+        if (widget.list![i].components != null &&
+            widget.list![i].components![name] != null &&
+            widget.list![i].dt != null) {
+          values.add(widget.list![i].components![name]!);
+          dates.add(widget.list![i].dt);
         }
-      });
+      }
 
       for (int i = 0; i < values.length; i++) {
         barChartGroupData.add(BarChartGroupData(
@@ -71,7 +71,7 @@ class _CustomBarChartState extends State<CustomBarChart> {
           mainAxisSize: MainAxisSize.max,
           children: [
             Text(
-              name,
+              getName(name),
               style: const TextStyle(color: Colors.white, fontSize: 22),
             ),
             const SizedBox(height: 5),
@@ -80,14 +80,6 @@ class _CustomBarChartState extends State<CustomBarChart> {
                 child: BarChart(
                   BarChartData(
                     maxY: values.isNotEmpty ? values.reduce(max) : 20,
-                    // barTouchData: BarTouchData(
-                    //     touchTooltipData: BarTouchTooltipData(
-                    //       tooltipBgColor: Colors.grey,
-                    //       getTooltipItem: (_a, _b, _c, _d) => null,
-                    //     ),
-                    //     touchCallback: (FlTouchEvent event, response) {
-                    //
-                    //     }),
                     titlesData: FlTitlesData(
                       show: true,
                       rightTitles: SideTitles(showTitles: false),
@@ -101,8 +93,9 @@ class _CustomBarChartState extends State<CustomBarChart> {
                         margin: 20,
                         getTitles: (double value) {
                           if (dates.isNotEmpty) {
-                            //TODO change format to date
-                            return dates[value.toInt()].toString();
+                            DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(dates[value.toInt()]! * 1000, isUtc: true);
+                            String convertedDateTime = "${dateTime.year.toString()}-${dateTime.month.toString().padLeft(2,'0')}-${dateTime.day.toString().padLeft(2,'0')}";
+                            return convertedDateTime;
                           } else {
                             return '0';
                           }
@@ -125,4 +118,28 @@ class _CustomBarChartState extends State<CustomBarChart> {
       ),
     );
   }
+
+  String getName(String shortName){
+    switch (shortName) {
+      case 'co':
+        return 'Carbon monoxide';
+      case 'no':
+        return 'Nitrogen oxide';
+      case 'no2':
+        return 'Nitrogen dioxide';
+      case 'o3':
+        return 'Ozone ';
+      case 'so2':
+        return 'Sulphur dioxide';
+      case 'pm2_5':
+        return 'Particulate matter 2.5';
+      case 'pm10':
+        return 'Particulate matter 10';
+      case 'nh3':
+        return 'Ammonia ';
+      default:
+          return '';
+    }
+  }
+
 }

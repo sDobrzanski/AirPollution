@@ -10,6 +10,7 @@ import 'package:air_pollution_app/blocs/google_places_cubit/google_places_cubit.
 
 class HomePage extends StatefulWidget {
   static const String route = '/';
+
   const HomePage({Key? key}) : super(key: key);
 
   @override
@@ -21,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   late GooglePlacesCubit googlePlacesCubit;
   late AirPollutionApiCubit airPollutionApiCubit;
   GeolocationData? geolocationData;
-  final LatLng _center = const LatLng(45.521563, -122.677433);
+  final LatLng _center = const LatLng(50.0647, 19.9450);
   final Map<String, Marker> _markers = {};
 
   @override
@@ -120,17 +121,6 @@ class _HomePageState extends State<HomePage> {
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
-    setState(() {
-      Marker marker = Marker(
-        markerId: MarkerId('center'),
-        position: _center,
-        infoWindow: InfoWindow(
-          title: 'title',
-          snippet: 'snippet',
-        ),
-      );
-      _markers['center'] = marker;
-    });
   }
 
   @override

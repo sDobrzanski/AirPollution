@@ -28,7 +28,6 @@ class _ChartsPageState extends State<ChartsPage> {
   late AirPollutionApiCubit airPollutionApiCubit;
   List<ListElement>? list;
   GeolocationData? geolocationData;
-  AirPollutionData? airPollutionData;
   int chartsNumber = 1;
   DateTime dateNow = DateTime.now();
   DateTime? dateFrom;
@@ -88,64 +87,69 @@ class _ChartsPageState extends State<ChartsPage> {
                         size: 25,
                       ),
                     ),
-                    MultiBlocListener(
-                      listeners: [
-                        BlocListener<GooglePlacesCubit, GooglePlacesState>(
-                          bloc: googlePlacesCubit,
-                          listenWhen: (previous, __) =>
-                              previous is GooglePlacesLoading,
-                          listener: (context, state) {
-                            if (state is GooglePlacesSuccess) {
-                              setState(() {
-                                geolocationData = state.geolocationData;
+                    BlocListener<GooglePlacesCubit, GooglePlacesState>(
+                      bloc: googlePlacesCubit,
+                      listenWhen: (previous, __) =>
+                          previous is GooglePlacesLoading,
+                      listener: (context, state) {
+                        if (state is GooglePlacesSuccess) {
+                          setState(() {
+                            geolocationData = state.geolocationData;
 
-                                airPollutionApiCubit.getHistoryAirData(
-                                  geolocationData!
-                                      .results!.first.geometry!.location!.lat!
-                                      .toString(),
-                                  geolocationData!
-                                      .results!.first.geometry!.location!.lng!
-                                      .toString(),
-                                  dateFrom ?? dateNow,
-                                  dateTo ?? dateNow,
-                                );
-                              });
-                            }
-                          },
-                        ),
-                        BlocListener<AirPollutionApiCubit,
-                            AirPollutionApiState>(
-                          bloc: airPollutionApiCubit,
-                          listenWhen: (previous, __) =>
-                              previous is StateLoading,
-                          listener: (context, state) {
-                            if (state is StateSuccess) {
-                              setState(() {
-                                airPollutionData = state.airData;
-                                list = airPollutionData?.list;
-                                chartsNumber = list!.first.components!.length;
-                              });
-                            }
-                          },
-                        )
-                      ],
-                      child: SizedBox(
-                        height: 450,
-                        width: 800,
-                        child: PageView.builder(
-                          scrollBehavior: ScrollConfiguration.of(context)
-                              .copyWith(dragDevices: {
-                            PointerDeviceKind.touch,
-                            PointerDeviceKind.mouse,
-                          }),
-                          itemCount: chartsNumber,
-                          controller: _pageController,
-                          itemBuilder: (BuildContext context, int index) =>
-                              CustomBarChart(
-                            index: index,
-                            list: list,
-                          ),
-                        ),
+                            airPollutionApiCubit.getHistoryAirData(
+                              geolocationData!
+                                  .results!.first.geometry!.location!.lat!
+                                  .toString(),
+                              geolocationData!
+                                  .results!.first.geometry!.location!.lng!
+                                  .toString(),
+                              dateFrom ?? dateNow,
+                              dateTo ?? dateNow,
+                            );
+                          });
+                        }
+                      },
+                      child: BlocBuilder<AirPollutionApiCubit,
+                          AirPollutionApiState>(
+                        bloc: airPollutionApiCubit,
+                        builder: (context, state) {
+                          if (state is StateLoading) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                  color: Colors.blue),
+                            );
+                          }
+                          if (state is StateSuccess) {
+                            list = state.airData?.list;
+                            chartsNumber = list!.first.components!.length;
+                            return SizedBox(
+                              height: 450,
+                              width: 800,
+                              child: PageView.builder(
+                                scrollBehavior: ScrollConfiguration.of(context)
+                                    .copyWith(dragDevices: {
+                                  PointerDeviceKind.touch,
+                                  PointerDeviceKind.mouse,
+                                }),
+                                itemCount: chartsNumber,
+                                controller: _pageController,
+                                itemBuilder:
+                                    (BuildContext context, int index) =>
+                                        CustomBarChart(
+                                  index: index,
+                                  list: list,
+                                ),
+                              ),
+                            );
+                          }
+
+                          return const Center(
+                            child: Text(
+                              'Enter place and date to see detailed data',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          );
+                        },
                       ),
                     ),
                     IconButton(

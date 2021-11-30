@@ -17,13 +17,16 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          const Text('Air pollution'),
-            SizedBox(
-              width: 500,
-              child: SearchField(
-                onSubmitted: onSubmitted!,
-              ),
+          const Padding(
+            padding: EdgeInsets.only(left: 8.0),
+            child: Text('Air pollution'),
+          ),
+          SizedBox(
+            width: 500,
+            child: SearchField(
+              onSubmitted: onSubmitted!,
             ),
+          ),
           if (isHomePage)
             IconButton(
               icon: const Icon(Icons.insert_chart),
@@ -32,7 +35,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
               },
             )
           else
-            const SizedBox(width: 60)
+            const SizedBox(width: 60),
         ],
       ),
       elevation: 8,

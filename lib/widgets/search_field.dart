@@ -38,21 +38,26 @@ class _SearchFieldState extends State<SearchField> {
           },
           textAlign: TextAlign.center,
           style: const TextStyle(color: Colors.white),
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             hintText: 'Search for place',
-            hintStyle: TextStyle(fontSize: 15, color: Colors.white),
-            prefixIcon: Icon(
-              Icons.search,
-              color: Colors.white,
-            ),
-            border: OutlineInputBorder(
+            hintStyle: const TextStyle(fontSize: 15, color: Colors.white),
+            prefixIcon: IconButton(
+                onPressed: () {
+                  widget.onSubmitted(textEditingController.text);
+                  textEditingController.clear();
+                },
+                icon: const Icon(
+                  Icons.search,
+                  color: Colors.white,
+                )),
+            border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(30.0)),
             ),
-            enabledBorder: OutlineInputBorder(
+            enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.white, width: 1.0),
               borderRadius: BorderRadius.all(Radius.circular(30.0)),
             ),
-            focusedBorder: OutlineInputBorder(
+            focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.white, width: 2.0),
               borderRadius: BorderRadius.all(Radius.circular(30.0)),
             ),
