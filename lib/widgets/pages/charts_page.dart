@@ -45,6 +45,8 @@ class _ChartsPageState extends State<ChartsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+
     return Material(
       child: Column(
         children: [
@@ -54,121 +56,135 @@ class _ChartsPageState extends State<ChartsPage> {
               googlePlacesCubit.getLocationData(value);
             },
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Column(
-              children: [
-                DateTimePickerRow(
-                  onDataFromChanged: (DateTime newDateTime) {
-                    setState(() {
-                      dateFrom = newDateTime;
-                    });
-                  },
-                  onDataToChanged: (DateTime newDateTime) {
-                    setState(() {
-                      dateTo = newDateTime;
-                    });
-                  },
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        if (canGoBack()) {
-                          _pageController.previousPage(
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.ease,
-                          );
-                        }
-                      },
-                      icon: const Icon(
-                        Icons.arrow_back_ios,
-                        size: 25,
-                      ),
-                    ),
-                    BlocListener<GooglePlacesCubit, GooglePlacesState>(
-                      bloc: googlePlacesCubit,
-                      listenWhen: (previous, __) =>
-                          previous is GooglePlacesLoading,
-                      listener: (context, state) {
-                        if (state is GooglePlacesSuccess) {
-                          setState(() {
-                            geolocationData = state.geolocationData;
-
-                            airPollutionApiCubit.getHistoryAirData(
-                              geolocationData!
-                                  .results!.first.geometry!.location!.lat!
-                                  .toString(),
-                              geolocationData!
-                                  .results!.first.geometry!.location!.lng!
-                                  .toString(),
-                              dateFrom ?? dateNow,
-                              dateTo ?? dateNow,
-                            );
-                          });
-                        }
-                      },
-                      child: BlocBuilder<AirPollutionApiCubit,
-                          AirPollutionApiState>(
-                        bloc: airPollutionApiCubit,
-                        builder: (context, state) {
-                          if (state is StateLoading) {
-                            return const Center(
-                              child: CircularProgressIndicator(
-                                  color: Colors.blue),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.only(top: 20),
+              child: Column(
+                children: [
+                  DateTimePickerRow(
+                    onDataFromChanged: (DateTime newDateTime) {
+                      setState(() {
+                        dateFrom = newDateTime;
+                      });
+                    },
+                    onDataToChanged: (DateTime newDateTime) {
+                      setState(() {
+                        dateTo = newDateTime;
+                      });
+                    },
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          if (canGoBack()) {
+                            _pageController.previousPage(
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.ease,
                             );
                           }
-                          if (state is StateSuccess) {
-                            list = state.airData?.list;
-                            chartsNumber = list!.first.components!.length;
-                            return SizedBox(
-                              height: 450,
-                              width: 800,
-                              child: PageView.builder(
-                                scrollBehavior: ScrollConfiguration.of(context)
-                                    .copyWith(dragDevices: {
-                                  PointerDeviceKind.touch,
-                                  PointerDeviceKind.mouse,
-                                }),
-                                itemCount: chartsNumber,
-                                controller: _pageController,
-                                itemBuilder:
-                                    (BuildContext context, int index) =>
-                                        CustomBarChart(
-                                  index: index,
-                                  list: list,
-                                ),
-                              ),
-                            );
-                          }
-
-                          return const Center(
-                            child: Text(
-                              'Enter place and date to see detailed data',
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          );
                         },
+                        icon: const Icon(
+                          Icons.arrow_back_ios,
+                          size: 25,
+                        ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        if (canGoForward()) {
-                          _pageController.nextPage(
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.ease,
-                          );
-                        }
-                      },
-                      icon: const Icon(
-                        Icons.arrow_forward_ios,
-                        size: 25,
+                      BlocListener<GooglePlacesCubit, GooglePlacesState>(
+                        bloc: googlePlacesCubit,
+                        listenWhen: (previous, __) =>
+                            previous is GooglePlacesLoading,
+                        listener: (context, state) {
+                          if (state is GooglePlacesSuccess) {
+                            setState(() {
+                              geolocationData = state.geolocationData;
+
+                              airPollutionApiCubit.getHistoryAirData(
+                                geolocationData!
+                                    .results!.first.geometry!.location!.lat!
+                                    .toString(),
+                                geolocationData!
+                                    .results!.first.geometry!.location!.lng!
+                                    .toString(),
+                                dateFrom ?? dateNow,
+                                dateTo ?? dateNow,
+                              );
+                            });
+                          }
+                        },
+                        child: BlocBuilder<AirPollutionApiCubit,
+                            AirPollutionApiState>(
+                          bloc: airPollutionApiCubit,
+                          builder: (context, state) {
+                            if (state is StateLoading) {
+                              return const Center(
+                                child: CircularProgressIndicator(
+                                    color: Colors.blue),
+                              );
+                            }
+                            if (state is StateSuccess) {
+                              list = state.airData?.list;
+                              chartsNumber = list!.first.components!.length;
+                              return SizedBox(
+                                height: screenWidth > 700 ? 450 : 300,
+                                width: screenWidth > 700 ? 800 : screenWidth - 40,
+                                child: PageView.builder(
+                                  scrollBehavior:
+                                      ScrollConfiguration.of(context)
+                                          .copyWith(dragDevices: {
+                                    PointerDeviceKind.touch,
+                                    PointerDeviceKind.mouse,
+                                  }),
+                                  itemCount: chartsNumber,
+                                  controller: _pageController,
+                                  itemBuilder:
+                                      (BuildContext context, int index) =>
+                                          CustomBarChart(
+                                    index: index,
+                                    list: list,
+                                  ),
+                                ),
+                              );
+                            }
+
+                            if (screenWidth > 700) {
+                              return const Center(
+                                child: Text(
+                                  'Enter place and date to see detailed data',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              );
+                            } else {
+                              return const Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'Enter place and date to see detailed data',
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      IconButton(
+                        onPressed: () {
+                          if (canGoForward()) {
+                            _pageController.nextPage(
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.ease,
+                            );
+                          }
+                        },
+                        icon: const Icon(
+                          Icons.arrow_forward_ios,
+                          size: 25,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],

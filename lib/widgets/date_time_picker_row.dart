@@ -12,9 +12,11 @@ class DateTimePickerRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime dateNow = DateTime.now();
+    final DateTime dateNow = DateTime.now();
+    final double screenWidth = MediaQuery.of(context).size.width;
 
-    return Row(
+    if (screenWidth > 700) {
+      return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Column(
@@ -50,5 +52,43 @@ class DateTimePickerRow extends StatelessWidget {
         ),
       ],
     );
+    } else {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Column(
+            children: [
+              Text('Pick start date'),
+              SizedBox(
+                height: 200,
+                width: 300,
+                child: CalendarDatePicker(
+                  initialDate: dateNow,
+                  firstDate: DateTime.fromMicrosecondsSinceEpoch(0),
+                  lastDate: DateTime.utc(2030),
+                  onDateChanged: onDataFromChanged,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(width: 20),
+          Column(
+            children: [
+              Text('Pick end date'),
+              SizedBox(
+                height: 200,
+                width: 300,
+                child: CalendarDatePicker(
+                  initialDate: dateNow,
+                  firstDate: DateTime.fromMicrosecondsSinceEpoch(0),
+                  lastDate: DateTime.utc(2030),
+                  onDateChanged: onDataToChanged,
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    }
   }
 }

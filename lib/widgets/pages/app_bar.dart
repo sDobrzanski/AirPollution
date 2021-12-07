@@ -13,16 +13,18 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
     return AppBar(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          const Padding(
-            padding: EdgeInsets.only(left: 8.0),
-            child: Text('Air pollution'),
-          ),
+          if (screenWidth > 770)
+            const Padding(
+              padding: EdgeInsets.only(left: 8.0),
+              child: Text('Air pollution'),
+            ),
           SizedBox(
-            width: 500,
+            width: screenWidth > 700 ? 500 : 250,
             child: SearchField(
               onSubmitted: onSubmitted!,
             ),
