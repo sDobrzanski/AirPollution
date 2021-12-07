@@ -125,26 +125,36 @@ class _ChartsPageState extends State<ChartsPage> {
                             if (state is StateSuccess) {
                               list = state.airData?.list;
                               chartsNumber = list!.first.components!.length;
-                              return SizedBox(
-                                height: screenWidth > 700 ? 450 : 300,
-                                width: screenWidth > 700 ? 800 : screenWidth - 40,
-                                child: PageView.builder(
-                                  scrollBehavior:
-                                      ScrollConfiguration.of(context)
-                                          .copyWith(dragDevices: {
-                                    PointerDeviceKind.touch,
-                                    PointerDeviceKind.mouse,
-                                  }),
-                                  itemCount: chartsNumber,
-                                  controller: _pageController,
-                                  itemBuilder:
-                                      (BuildContext context, int index) =>
-                                          CustomBarChart(
-                                    index: index,
-                                    list: list,
+                              if (list != null && list!.isNotEmpty) {
+                                return SizedBox(
+                                  height: screenWidth > 700 ? 450 : 300,
+                                  width: screenWidth > 700 ? 800 : screenWidth -
+                                      40,
+                                  child: PageView.builder(
+                                    scrollBehavior:
+                                    ScrollConfiguration.of(context)
+                                        .copyWith(dragDevices: {
+                                      PointerDeviceKind.touch,
+                                      PointerDeviceKind.mouse,
+                                    }),
+                                    itemCount: chartsNumber,
+                                    controller: _pageController,
+                                    itemBuilder:
+                                        (BuildContext context, int index) =>
+                                        CustomBarChart(
+                                          index: index,
+                                          list: list,
+                                        ),
                                   ),
-                                ),
-                              );
+                                );
+                              } else {
+                                return const Center(
+                                  child: Text(
+                                    'Pick another date',
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                );
+                              }
                             }
 
                             if (screenWidth > 700) {
