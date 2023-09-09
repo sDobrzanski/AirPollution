@@ -11,8 +11,9 @@ zanieczyszczeniu powietrza dla dowolnych współrzędnych na kuli ziemskiej
 - Aplikacja Webowa została napisana we Flutterze
 - Usługi chmurowe AWS i Firebase (opisane poniżej)
 - Terraform (opisane poniżej)
-![Architektura systemu](https://github.com/sDobrzanski/AirPollution/assets/44682121/ce2457ee-1e50-45d3-b45c-44230f7afd4a.png)
-Rys. 1 Architektura systemu
+  
+<img width="1313" alt="Architektura system" src="https://github.com/sDobrzanski/AirPollution/assets/44682121/1fa69102-8653-4375-b124-cca34f254117">
+<sub>Rys. 1 Architektura systemu</sub>
 
 Aplikacja webowa została napisana we Flutterze. Jako źródło danych użyto Open Weather Air
 Pollution API, który udostępnia dane powietrza w każdym punkcie na ziemi. Poniżej przedstawiono
@@ -118,17 +119,20 @@ throw 'Caught generic exception $e';
 
 ```
 W konsoli Firebase można śledzić aktywność funkcji.
-![Konsola Firebase Functions](https://github.com/sDobrzanski/AirPollution/assets/44682121/38894d82-a0d2-409e-a3cb-6d37e374378a.png)
-Rys.2 Konsola Firebase Functions
-![Ilość wywołań funkcji w czasie](https://github.com/sDobrzanski/AirPollution/assets/44682121/c9868762-e3d5-4a25-9c77-fe69904b046d.png)
-Rys. 3 Ilość wywołań funkcji w czasie
+
+<img width="1224" alt="Konsola Firebase Functions" src="https://github.com/sDobrzanski/AirPollution/assets/44682121/065e3ccc-e0b1-4f1a-b0be-eb27d44a334a">
+<sub>Rys.2 Konsola Firebase Functions</sub>
+
+<img width="1257" alt="Ilość wywołań funkcji w czasie" src="https://github.com/sDobrzanski/AirPollution/assets/44682121/519f9dc9-c1c6-437b-96ac-508e4fea0faa">
+<sub>Rys. 3 Ilość wywołań funkcji w czasie</sub>
 
 ## 2. Wdrożenie aplikacji na AWS
 Celem projektu było wdrożenie aplikacji na usługach zapewnianych przez AWS. Poniżej
 przedstawiono schemat sieci z serwisami użytymi do w pełni zabezpieczonego zhostowania aplikacji
 w AWS.
-![Zasoby AWS dla strony](https://github.com/sDobrzanski/AirPollution/assets/44682121/d60e4764-0495-425d-b6b3-a221a2537173.png)
-Rys. 4 Zasoby AWS dla strony
+
+<img width="1254" alt="Zasoby AWS dla strony" src="https://github.com/sDobrzanski/AirPollution/assets/44682121/3145268c-442a-48c7-8821-8b2765e73f17">
+<sub>Rys. 4 Zasoby AWS dla strony</sub>
 
 - Wszystkie pliki statyczne będą znajdowały się w buckecie S3.
 - Cloudfront będzie działał jako CDN i udostępniał zawartość bucketu S3 używając HTTPS.
@@ -249,10 +253,12 @@ ttl = 60
 Istnieją 2 metody walidacji, tego że domena należy do nas. W tym przypadku użyta zostanie
 walidacja DNS (druga to walidacja poprzez email). Domena została zakupiona u rejestratora domen
 home.pl.
-![Domena w home.pl](https://github.com/sDobrzanski/AirPollution/assets/44682121/dfe25d3c-9d61-4148-b640-a6399b5d11e8.png)
-Rys.5 Domena w home.pl
-![Nazwy serwerów AWS](https://github.com/sDobrzanski/AirPollution/assets/44682121/af51917b-df31-49f3-bca9-6a1a2998a510.png)
-Rys.6 Nazwy serwerów AWS
+
+<img width="1260" alt="Domena w home.pl" src="https://github.com/sDobrzanski/AirPollution/assets/44682121/74900277-ffe3-4bbd-a73d-84bc0ae35c16">
+<sub>Rys.5 Domena w home.pl</sub>
+
+<img width="726" alt="Nazwy serwerów AWS" src="https://github.com/sDobrzanski/AirPollution/assets/44682121/8b41921b-d47b-454f-b5f4-8271486932a8">
+<sub>Rys.6 Nazwy serwerów AWS</sub>
 
 Ze względu na to, że aplikacja jest hostowana w AWS na stronie gdzie zarejestrowano
 domenę należało dodać nazwy serwerów AWS przez które przechodzić będzie hosting DNS.
@@ -302,10 +308,12 @@ AQI czyli indeksu stanu powietrza:
 - tlenek węgla
 - dwutlenek siarki
 - dwutlenek azotu
-![Strona główna aplikacji](https://github.com/sDobrzanski/AirPollution/assets/44682121/e044a31d-8c63-4a15-991f-453ece884829.png)
-Rys. 7 Strona główna aplikacji
+
+<img width="1269" alt="Strona główna aplikacji" src="https://github.com/sDobrzanski/AirPollution/assets/44682121/929b3b3c-0b19-4513-93c0-967db9ea3f0a">
+<sub>Rys. 7 Strona główna aplikacji</sub>
 
 Na drugiej stronie użytkownik jest w stanie sprawdzić historyczne dane stanu powietrza.
 Zostaną one wyświetlone w formie wykresów wartości wskaźnika w czasie.
-![Strona z danymi historycznym](https://github.com/sDobrzanski/AirPollution/assets/44682121/1ea5496a-9422-4c51-8215-18678fc46d6b.png)
-Rys. 8 Strona z danymi historycznym
+
+<img width="1233" alt="Strona z danymi historycznym" src="https://github.com/sDobrzanski/AirPollution/assets/44682121/54c40069-9f20-45b4-9c35-f99fd40e0590">
+<sub>Rys. 8 Strona z danymi historycznym</sub>
